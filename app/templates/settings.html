@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title%}
+LinsAlert - Настройки
+{% endblock %}
+
+{% block settings_page %}
+active
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/bootstrap-datepicker.css" />
+<style>
+.email-alert-input {
+	margin-top: 10px;
+}
+
+.checkbox-inline {
+	margin-right: 20px;
+}
+
+#alert-time-display {
+	text-align: center;
+	color: #333;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/bootstrap-datepicker.js"></script>
+<script src="/static/js/locales/bootstrap-datepicker.ru.js"></script>
+<script>
+$(document).ready(function(){
+
+	/*
+	*	DatePicker
+	*/
+
+	var now = new Date();
+	var now_format = now.getDate() + "/" + parseInt(now.getMonth()+1) + "/" + now.getFullYear();
+
+	$(".input-daterange").datepicker({
+		format: "dd.mm.yyyy",
+		startDate: now_format,
+		endDate: "01/08/2014",
+		language: "ru",
+		orientation: "auto left",
+		autoclose: true,
+		todayHighlight: true
+	});
+
+	/*
+	*	TimePicker
+	*/
+
+	var toggleTime = 0,	//0 - plus, 1 - minus
+		curTime = $("#alert-time-display").val() || "12:00";
+
+	function updateTime(){
+		var display = $("#alert-time-display");
+		var t = curTime.split(":"),
+			hour = t[0],
+			min = t[1];
+
+		if(min == 0){
+			min = 30;
+			if(toggleTime && hour != 0) hour--;
+			else if(toggleTime && hour == 0) hour = 23;
+		}
+		else{
+			min = "00";
+			if(!toggleTime && hour != 23) hour++;
+			else if(!toggleTime && hour == 23) hour = 0;
+		};
+
+		curTime = hour + ":" + min;
+		display.val(curTime);
+	};
+
+	$("#plus-time").click(function(){
+		toggleTime = 0;
+		updateTime();
+	});
+
+	$("#minus-time").click(function(){
+		toggleTime = 1;
+		updateTime();
+	});
+
+	/*
+	*	Controls
+	*/
+
+	$("#email-alert").click(function(){
+		if($(this).is(':checked')) $(".email-alert-input").show().find("input").val("");
+		else $(".email-alert-input").hide().find("input").val("");
+	});
+
+	var now = new Date();
+
+	$("#id_user_time").val(now.getHours());
+
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<form class="form" action="/settings/" method="post">{% csrf_token %}
+		<h2 class="form-sign-heading">Настройки</h2>
+		{% if form.non_field_errors %}
+			{% for error in form.non_field_errors %}
+				<div class="alert alert-danger alert-dismissable">
+					<strong>{{ error|escape }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+		<div class="form-group">
+			<label>Способ оповещения</label>
+			<div>
+				<label class="checkbox-inline">
+					{{ form.alert_email }} email
+				</label>				
+				<label class="checkbox-inline">
+					{{ form.alert_sms }} sms <span class="label label-info">временно не работает</span>
+				</label>
+			</div>
+			<div class="row email-alert-input" {% if not form.alert_email.value %}style="display: none;"{% endif %}>
+				<div class="col-lg-4">
+					{% if form.email.errors %}
+						{% for error in form.email.errors %}
+							<div class="alert alert-danger alert-dismissable">
+								<strong>{{ error|escape }}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+						{% endfor %}
+					{% endif %}
+					{{ form.email }}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>Период работы оповещений</label>
+			<div class="row">
+				<div class="col-lg-4">
+					{% if form.start.errors %}
+						{% for error in form.start.errors %}
+							<div class="alert alert-danger alert-dismissable">
+								<strong>{{ error|escape }}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+						{% endfor %}
+					{% endif %}
+					{% if form.finish.errors %}
+						{% for error in form.finish.errors %}
+							<div class="alert alert-danger alert-dismissable">
+								<strong>{{ error|escape }}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+						{% endfor %}
+					{% endif %}
+					<div class="input-daterange input-group" id="datepicker">
+						<span class="input-group-addon" style="color: #333;">с</span>
+						{{ form.start }}
+						<span class="input-group-addon" style="color: #333;">по</span>
+						{{ form.finish }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>Время оповещения</label>
+			<div class="row">
+				<div class="col-lg-4">	
+					{% if form.time.errors %}
+						{% for error in form.time.errors %}
+							<div class="alert alert-danger alert-dismissable">
+								<strong>{{ error|escape }}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-2">
+					<div class="input-group">
+						<div class="input-group-btn">
+							<button id="minus-time" type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+						</div>
+						{{ form.time }}
+						<div class="input-group-btn">
+							<button id="plus-time" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>							
+						</div>
+					</div>
+				</div>				
+			</div>
+		</div>
+		<div class="form-group">
+			<label>Частота оповещений</label>			
+			<div class="row">
+				<div class="col-lg-4">
+					{% if form.period.errors %}
+						{% for error in form.period.errors %}
+							<div class="alert alert-danger alert-dismissable">
+								<strong>{{ error|escape }}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-2">
+					<div class="input-group">
+						{{ form.period }}
+					</div>
+				</div>				
+			</div>
+		</div>
+		{{ form.user_time }}
+		<button class="btn btn-primary" type="sumbit">Сохранить</button>
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title%}
+	LinsAlert - Авторизация
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<form class="form-sign" action="/sign_in/" method="post">{% csrf_token %}
+		<h2 class="form-sign-heading">Авторизация</h2>
+		{{ form.username }}
+		{% if form.username.errors %}
+			{% for error in form.username.errors %}
+				<div class="alert alert-danger alert-dismissable">
+					<strong>{{ error|escape }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		{{ form.password }}
+		{% if form.password.errors %}
+			{% for error in form.password.errors %}
+				<div class="alert alert-danger alert-dismissable">
+					<strong>{{ error|escape }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		<p style="margin-top: 10px;">
+			<a class="link" href="/reset_password/">Забыли пароль?</a>
+		</p>
+
+		{% if form.non_field_errors %}
+			{% for error in form.non_field_errors %}
+				<div class="alert alert-danger alert-dismissable">
+					<strong>{{ error|escape }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+		<button class="btn btn-lg btn-primary btn-block" type="sumbit">Войти</button>
+	</form>
+</div>
+{% endblock %}

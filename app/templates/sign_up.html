@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title%}
+	LinsAlert - Регистрация
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<form class="form-sign" action="/sign_up/" method="post">{% csrf_token %}
+		<h2 class="form-sign-heading">Регистрация</h2>
+		{{ form.username }}
+		{% if form.username.errors %}
+			{% for error in form.username.errors %}
+				<div class="alert alert-danger alert-dismissable">
+					<strong>{{ error|escape }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		{{ form.password }}
+		{% if form.password.errors %}
+			{% for error in form.password.errors %}
+				<div class="alert alert-danger alert-dismissable">
+					<strong>{{ error|escape }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		{{ form.password_repeat }}
+		{% if form.password_repeat.errors %}
+			{% for error in form.password_repeat.errors %}
+				<div class="alert alert-danger alert-dismissable">
+					<strong>{{ error|escape }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		{% if form.non_field_errors %}
+			{% for error in form.non_field_errors %}
+				<div class="alert alert-danger alert-dismissable">
+					<strong>{{ error|escape }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		<button class="btn btn-lg btn-block btn-primary" type="sumbit">Зарегистрироваться</button>
+
+		<p style="text-align: center; font-size: 24px; margin-top: 10px;">или</p>
+
+		<a class="btn btn-lg btn-block btn-vk" type="button" href="https://oauth.vk.com/authorize?client_id=3848319&scope=&redirect_uri=http://linsalert.mooo.com&response_type=code"><i class="icon-vk"></i> | Войти через VK</a>
+		
+	</form>
+</div>
+{% endblock %}

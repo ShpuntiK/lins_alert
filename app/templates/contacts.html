@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title%}
+LinsAlert - Контакты
+{% endblock %}
+
+{% block contacts_page %}
+active
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-lg-4">
+			<form class="form" action="/contacts/" method="post">{% csrf_token %}
+				<h2 class="form-sign-heading">Обратная связь</h2>
+				{% if form.non_field_errors %}
+					{% for error in form.non_field_errors %}
+						<div class="alert alert-danger alert-dismissable">
+							<strong>{{ error|escape }}</strong>
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						</div>
+					{% endfor %}
+				{% endif %}
+				<div class="form-group">
+					<label>Ваш email</label>
+					{% if form.email.errors %}
+						{% for error in form.email.errors %}
+							<div class="alert alert-danger alert-dismissable">
+								<strong>{{ error|escape }}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+						{% endfor %}
+					{% endif %}
+					{{ form.email }}
+				</div>
+				<div class="form-group">
+					<label>Тема</label>
+					{% if form.email.errors %}
+						{% for error in form.email.errors %}
+							<div class="alert alert-danger alert-dismissable">
+								<strong>{{ error|escape }}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+						{% endfor %}
+					{% endif %}
+					{{ form.subject }}
+				</div>
+				<div class="form-group">
+					<label>Текст сообщения</label>
+					{% if form.email.errors %}
+						{% for error in form.email.errors %}
+							<div class="alert alert-danger alert-dismissable">
+								<strong>{{ error|escape }}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+						{% endfor %}
+					{% endif %}
+					{{ form.message }}
+				</div>
+				<button class="btn btn-primary" type="sumbit">Отправить</button>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
