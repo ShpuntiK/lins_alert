@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 	url(r'^contacts/$', 'app.views.contacts', name='contacts'),
 	url(r'^sign_in/$', 'app.views.signIn', name='signIn'),
 	url(r'^sign_up/$', 'app.views.signUp', name='signUp'),
+	url(r'^sign_in_vk/$', 'app.views.signInVk', name='signInVk'),
 	url(r'^sign_out/$', 'app.views.signOut', name='signOut'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
