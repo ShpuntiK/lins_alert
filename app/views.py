@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from forms import SignUpForm, SignInForm, SettingsForm, ContactForm
 from models import Alert
 from datetime import datetime, time, timedelta
+import requests
 
 def index(request):
 	return render_to_response('index.html', RequestContext(request))
@@ -86,6 +87,28 @@ def signIn(request):
 			if form.get_user():
 				login(request, form.get_user())
 				return HttpResponseRedirect('/settings')
+	else:
+		form = SignInForm()
+
+	return render_to_response('sign_in.html', {'form': form}, RequestContext(request))
+
+def signInVk(request):
+	if request.user.is_authenticated():
+		return HttpResponseRedirect('/')
+
+	if request.method == 'GET' and request.GET['code']:
+		params = {
+			'client_id': '3848319',
+			'client_secret': 'hIZ7VPQv3bwfRdcmQxVf',
+			'code': request.GET['code'],
+			'redirect_uri': 'http://lins_alert.mooo.com/settings'
+		}
+
+		r = requests.get('https://oauth.vk.com/access_token', params=params)
+		print "ASDSADSADAS %s" % r.json()
+
+		# login(request, form.get_user())
+		# 		return HttpResponseRedirect('/settings')
 	else:
 		form = SignInForm()
 
