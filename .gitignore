@@ -1,6 +1,3 @@
 *.log
 *.pot
 *.pyc
-settings.py
-lins_alert.db
-lins_alert
