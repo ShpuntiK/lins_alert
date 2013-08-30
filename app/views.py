@@ -107,14 +107,14 @@ def signInVk(request):
 		r = requests.get('https://oauth.vk.com/access_token', params=params)
 		user_data = r.json()
 
-		r = requests.get('https://api.vk.com/method/users.get?user_ids=' + user_data['user_id'])
-		user_data = r.json()
-		password = user_data['last_name']+user_data['uid']
+		r = requests.get('https://api.vk.com/method/users.get?user_ids=' + str(user_data['user_id']))
+		user_data = r.json()['response'][0]
+		password = user_data['last_name'] + str(user_data['uid'])
 
 		if User.objects.filter(username=user_data['uid']).count() == 0:
-			User.objects.create_user(username=user_data['uid'], password=password, first_name=user_data['first_name']):
+			User.objects.create_user(username=user_data['uid'], password=password, first_name=user_data['first_name'])
 	
-		user = authenticate(username=username, password=password)
+		user = authenticate(username=user_data['uid'], password=password)
 		login(request, user)
 		
 		return HttpResponseRedirect('/settings')
