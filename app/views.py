@@ -101,7 +101,7 @@ def signInVk(request):
 			'client_id': '3848319',
 			'client_secret': 'hIZ7VPQv3bwfRdcmQxVf',
 			'code': request.GET['code'],
-			'redirect_uri': 'http://linsalert.mooo.com/sign_in_vk'
+			'redirect_uri': 'http://lins_alert.mooo.com/settings'
 		}
 
 		r = requests.get('https://oauth.vk.com/access_token', params=params)
