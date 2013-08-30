@@ -46,6 +46,8 @@ def settings(request):
 				phone=data['phone']
 			)
 
+			alert = {}
+
 			try:
 				a.save()
 				alert['txt'] = 'Настройки сохранены'
