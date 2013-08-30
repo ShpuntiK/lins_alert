@@ -106,48 +106,50 @@ $(document).ready(function(){
 
 {% block content %}
 <div class="container">
-	<div class="alert {{alert.cls}} alert-dismissable">
-		<strong>{{ alert.txt }}</strong>
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	</div>
-	<form class="form" action="/settings/" method="post">{% csrf_token %}
-		<h2 class="form-sign-heading">Настройки</h2>
-		{% if form.non_field_errors %}
-			{% for error in form.non_field_errors %}
-				<div class="alert alert-danger alert-dismissable">
-					<strong>{{ error|escape }}</strong>
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				</div>
-			{% endfor %}
-		{% endif %}
-		<div class="form-group">
-			<label>Способ оповещения</label>
-			<div>
-				<label class="checkbox-inline">
-					{{ form.alert_email }} email
-				</label>				
-				<label class="checkbox-inline">
-					{{ form.alert_sms }} sms <span class="label label-info">временно не работает</span>
-				</label>
+	<div class="row">
+		<div class="col-lg-4">
+			
+			{% if alert %}
+			<div class="alert {{alert.cls}} alert-dismissable">
+				<strong>{{ alert.txt }}</strong>
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 			</div>
-			<div class="row email-alert-input" {% if not form.alert_email.value %}style="display: none;"{% endif %}>
-				<div class="col-lg-4">
-					{% if form.email.errors %}
-						{% for error in form.email.errors %}
-							<div class="alert alert-danger alert-dismissable">
-								<strong>{{ error|escape }}</strong>
-								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-							</div>
-						{% endfor %}
-					{% endif %}
-					{{ form.email }}
+			{% endif %}
+
+			<form class="form" action="/settings/" method="post">{% csrf_token %}
+				<h2 class="form-sign-heading">Настройки</h2>
+				{% if form.non_field_errors %}
+					{% for error in form.non_field_errors %}
+						<div class="alert alert-danger alert-dismissable">
+							<strong>{{ error|escape }}</strong>
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						</div>
+					{% endfor %}
+				{% endif %}
+				<div class="form-group">
+					<label>Способ оповещения</label>
+					<div>
+						<label class="checkbox-inline">
+							{{ form.alert_email }} email
+						</label>				
+						<label class="checkbox-inline">
+							{{ form.alert_sms }} sms <span class="label label-info">временно не работает</span>
+						</label>
+					</div>
+					<div class="email-alert-input" {% if not form.alert_email.value %}style="display: none;"{% endif %}>
+						{% if form.email.errors %}
+							{% for error in form.email.errors %}
+								<div class="alert alert-danger alert-dismissable">
+									<strong>{{ error|escape }}</strong>
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+								</div>
+							{% endfor %}
+						{% endif %}
+						{{ form.email }}
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<label>Период работы оповещений</label>
-			<div class="row">
-				<div class="col-lg-4">
+				<div class="form-group">
+					<label>Период работы оповещений</label>
 					{% if form.start.errors %}
 						{% for error in form.start.errors %}
 							<div class="alert alert-danger alert-dismissable">
@@ -171,12 +173,8 @@ $(document).ready(function(){
 						{{ form.finish }}
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<label>Время оповещения</label>
-			<div class="row">
-				<div class="col-lg-4">	
+				<div class="form-group">
+					<label>Время оповещения</label>
 					{% if form.time.errors %}
 						{% for error in form.time.errors %}
 							<div class="alert alert-danger alert-dismissable">
@@ -185,26 +183,22 @@ $(document).ready(function(){
 							</div>
 						{% endfor %}
 					{% endif %}
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-2">
-					<div class="input-group">
-						<div class="input-group-btn">
-							<button id="minus-time" type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
-						</div>
-						{{ form.time }}
-						<div class="input-group-btn">
-							<button id="plus-time" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>							
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="input-group">
+								<div class="input-group-btn">
+									<button id="minus-time" type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+								</div>	
+								{{ form.time }}					
+								<div class="input-group-btn">
+									<button id="plus-time" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>							
+								</div>				
+							</div>
 						</div>
 					</div>
-				</div>				
-			</div>
-		</div>
-		<div class="form-group">
-			<label>Частота оповещений</label>			
-			<div class="row">
-				<div class="col-lg-4">
+				</div>
+				<div class="form-group">
+					<label>Частота оповещений</label>			
 					{% if form.period.errors %}
 						{% for error in form.period.errors %}
 							<div class="alert alert-danger alert-dismissable">
@@ -213,18 +207,14 @@ $(document).ready(function(){
 							</div>
 						{% endfor %}
 					{% endif %}
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-2">
 					<div class="input-group">
 						{{ form.period }}
 					</div>
-				</div>				
-			</div>
+				</div>
+				{{ form.user_time }}
+				<button class="btn btn-primary" type="sumbit">Сохранить</button>
+			</form>
 		</div>
-		{{ form.user_time }}
-		<button class="btn btn-primary" type="sumbit">Сохранить</button>
-	</form>
+	</div>
 </div>
 {% endblock %}
