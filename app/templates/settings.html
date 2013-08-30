@@ -106,6 +106,10 @@ $(document).ready(function(){
 
 {% block content %}
 <div class="container">
+	<div class="alert {{alert.cls}} alert-dismissable">
+		<strong>{{ alert.txt }}</strong>
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	</div>
 	<form class="form" action="/settings/" method="post">{% csrf_token %}
 		<h2 class="form-sign-heading">Настройки</h2>
 		{% if form.non_field_errors %}

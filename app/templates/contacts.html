@@ -18,6 +18,14 @@ active
 <div class="container">
 	<div class="row">
 		<div class="col-lg-4">
+			
+			{% if alert %}
+			<div class="alert {{alert.cls}} alert-dismissable">
+				<strong>{{ alert.txt }}</strong>
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			</div>
+			{% endif %}
+
 			<form class="form" action="/contacts/" method="post">{% csrf_token %}
 				<h2 class="form-sign-heading">Обратная связь</h2>
 				{% if form.non_field_errors %}

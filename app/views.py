@@ -10,6 +10,7 @@ from forms import SignUpForm, SignInForm, SettingsForm, ContactForm
 from models import Alert
 from datetime import datetime, time, timedelta
 import requests
+from django.core.mail import send_mail
 
 def index(request):
 	return render_to_response('index.html', RequestContext(request))
@@ -32,17 +33,6 @@ def settings(request):
 			as_time = datetime(2013, 1, 1, data['time'].hour, data['time'].minute)			
 			as_time = as_time + timedelta(hours=tz_diff)
 
-			# if data['period'] == '1':
-			# 	alert_period = 1
-			# elif data['period'] == '2':
-			# 	alert_period = 7
-			# elif data['period'] == '3':
-			# 	alert_period = 14
-			# else:
-			# 	alert_period = 28
-
-			# print data
-
 			a = Alert(
 				user=request.user,
 				alert_server_time=as_time,
@@ -56,8 +46,15 @@ def settings(request):
 				phone=data['phone']
 			)
 
-			a.save()
-			return HttpResponseRedirect('/settings')
+			try:
+				a.save()
+				alert['txt'] = 'Настройки сохранены'
+				alert['cls'] = 'alert-success'
+			except:
+				alert['txt'] = 'Не удалось сохранить настройки, попробуйте повторить позже'
+				alert['cls'] = 'alert-danger'
+
+			return render_to_response('settings.html', {'form': form, 'alert': alert}, RequestContext(request))
 	else:
 		try:
 			a = Alert.objects.get(user=request.user)
@@ -71,7 +68,18 @@ def contacts(request):
 	if request.method == 'POST':
 		form = ContactForm(request.POST)
 		if form.is_valid():
-			pass #send_email
+			data = form.cleaned_data
+			alert = {}
+
+			try:
+				send_mail(data['subject'], data['message'], data['email'], ['shpuntik74@gmail.com'], fail_silently=False)
+				alert['txt'] = 'Ваше сообщение отправлено'
+				alert['cls'] = 'alert-success'
+			except:
+				alert['txt'] = 'Не удалось отправить сообщение, повторите попытку позже'
+				alert['cls'] = 'alert-danger'
+			
+			return render_to_response('contacts.html', {'form': form, 'alert': alert}, RequestContext(request))
 	else:
 		form = ContactForm()
 
