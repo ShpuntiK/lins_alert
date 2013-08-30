@@ -1,4 +1,6 @@
 *.log
 *.pot
 *.pyc
-local_settings.py
+settings.py
+lins_alert.db
+lins_alert

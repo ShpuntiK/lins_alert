@@ -35,7 +35,7 @@
 								<li class="{% block contacts_page %}{% endblock %}"><a href="/contacts/">Контакты</a></li>
 								{% if user.is_authenticated %}
 								<li class="dropdown {% block settings_page %}{% endblock %}">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.username }} <b class="caret"></b></a>
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
 									<ul class="dropdown-menu">
 										<li><a href="/settings">Настройки <span class="glyphicon glyphicon-cog"></span></a></li>
 										<li class="divider"></li>

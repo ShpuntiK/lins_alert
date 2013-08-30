@@ -101,18 +101,23 @@ def signInVk(request):
 			'client_id': '3848319',
 			'client_secret': 'hIZ7VPQv3bwfRdcmQxVf',
 			'code': request.GET['code'],
-			'redirect_uri': 'http://linsalert.mooo.com/sign_in_vk'
+			'redirect_uri': 'http://lins_alert.mooo.com/settings'
 		}
 
 		r = requests.get('https://oauth.vk.com/access_token', params=params)
-		print "ASDSADSADAS %s" % r.json()
+		user_data = r.json()
 
-		# login(request, form.get_user())
-		# 		return HttpResponseRedirect('/settings')
-	else:
-		form = SignInForm()
+		r = requests.get('https://api.vk.com/method/users.get?user_ids=' + user_data['user_id'])
+		user_data = r.json()
+		password = user_data['last_name']+user_data['uid']
 
-	return render_to_response('sign_in.html', {'form': form}, RequestContext(request))
+		if User.objects.filter(username=user_data['uid']).count() == 0:
+			User.objects.create_user(username=user_data['uid'], password=password, first_name=user_data['first_name']):
+	
+		user = authenticate(username=username, password=password)
+		login(request, user)
+		
+		return HttpResponseRedirect('/settings')
 
 def signUp(request):
 	if request.user.is_authenticated():
@@ -123,7 +128,7 @@ def signUp(request):
 		if form.is_valid():
 			username = request.POST['username']
 			password = request.POST['password']
-			if User.objects.create_user(username=username, password=password):
+			if User.objects.create_user(username=username, password=password, first_name=username):
 				user = authenticate(username=username, password=password)
 				login(request, user)
 				return HttpResponseRedirect('/settings')
