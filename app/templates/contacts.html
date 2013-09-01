@@ -9,6 +9,17 @@ active
 {% endblock %}
 
 {% block styles %}
+<style>
+	#disqus_thread {
+		padding: 10px 20px;
+		border: 1px solid #ccc;
+		border-radius: 2px;
+	}
+
+	#layout #footer {
+		display: none;
+	}
+</style>
 {% endblock %}
 
 {% block scripts %}
@@ -74,7 +85,11 @@ active
 				</div>
 				<button class="btn btn-primary" type="sumbit">Отправить</button>
 			</form>
-
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-lg-6">
 			<h2 class="form-sign-heading">Отзывы и предложения</h2>
 			<div id="disqus_thread"></div>
 			<script type="text/javascript">
@@ -87,9 +102,7 @@ active
 					(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 				})();
 			</script>
-			<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-			<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
+			<noscript>Пожалуйста, включите JavaScript, чтобы увидеть комментарии</noscript>
 		</div>
 	</div>
 </div>
