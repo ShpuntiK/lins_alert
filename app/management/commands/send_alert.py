@@ -13,15 +13,15 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		cur_time = datetime.now().strftime('%H:%M')
-		#alerts = Alert.objects.filter(alert_server_time=cur_time)
-		alerts = Alert.objects.all()
+		alerts = Alert.objects.filter(alert_server_time=cur_time)
+		#alerts = Alert.objects.all()
 
 		if alerts.count() != 0:
 			msges = []
 			
 			for alert in alerts:
 				subject = u'LinsAlert - оповещение о смене линз.'
-				msg = alert.user.first_name + u'Сервис LinsAlert напоминает вам об необходимости смены линз.'
+				msg = u'Здравствуйте, ' + alert.user.first_name + u'. Сервис LinsAlert напоминает вам об необходимости смены линз.'
 				from_email = u'shpuntik74@gmail.com'
 				
 				msges.append((subject, msg, from_email, [alert.email]))
