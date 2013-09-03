@@ -58,7 +58,7 @@ $(document).ready(function(){
 
 	function updateTime(){
 		var display = $("#alert-time-display");
-		var t = curTime.split(":"),
+		var t = curTime.split(/:|-/),
 			hour = t[0],
 			min = t[1];
 
@@ -79,11 +79,13 @@ $(document).ready(function(){
 
 	$("#plus-time").click(function(){
 		toggleTime = 0;
+		curTime = $("#alert-time-display").val() || "12:00"
 		updateTime();
 	});
 
 	$("#minus-time").click(function(){
 		toggleTime = 1;
+		curTime = $("#alert-time-display").val() || "12:00"
 		updateTime();
 	});
 

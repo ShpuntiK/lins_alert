@@ -25,30 +25,33 @@
 		<div class="navbar-wrapper">
 			<div class="container">
 				<div class="navbar navbar-inverse navbar-default">
-					<div class="container">
-						<div class="navbar-header">
-							<a class="navbar-brand" href="/">LinsAlert</a>
-						</div>
-						<div class="navbar-collapse collapse">
-							<ul class="nav navbar-nav">
-								<li class="{% block main_page %}{% endblock %}"><a href="/">Главная</a></li>
-								<li class="{% block contacts_page %}{% endblock %}"><a href="/contacts/">Контакты</a></li>
-								{% if not user.is_authenticated %}
-								<li class="{% block sign_up_page %}{% endblock %}"><a href="/sign_up/">Регистрация</a></li>
-								<li class="{% block sign_in_page %}{% endblock %}"><a href="/sign_in/">Авторизация</a></li>
-								{% endif %}
-								{% if user.is_authenticated %}
-								<li class="dropdown {% block settings_page %}{% endblock %}">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
-									<ul class="dropdown-menu">
-										<li><a href="/settings">Настройки <span class="glyphicon glyphicon-cog"></span></a></li>
-										<li class="divider"></li>
-										<li><a href="/sign_out">Выйти <span class="glyphicon glyphicon-log-out"></span></a></li>
-									</ul>
-								</li>
-								{% endif %}
-							</ul>
-						</div>
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/">LinsAlert</a>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="{% block main_page %}{% endblock %}"><a href="/">Главная</a></li>
+							<li class="{% block contacts_page %}{% endblock %}"><a href="/contacts/">Контакты</a></li>
+							{% if not user.is_authenticated %}
+							<li class="{% block sign_up_page %}{% endblock %}"><a href="/sign_up/">Регистрация</a></li>
+							<li class="{% block sign_in_page %}{% endblock %}"><a href="/sign_in/">Авторизация</a></li>
+							{% endif %}
+							{% if user.is_authenticated %}
+							<li class="dropdown {% block settings_page %}{% endblock %}">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="/settings">Настройки <span class="glyphicon glyphicon-cog"></span></a></li>
+									<li class="divider"></li>
+									<li><a href="/sign_out">Выйти <span class="glyphicon glyphicon-log-out"></span></a></li>
+								</ul>
+							</li>
+							{% endif %}
+						</ul>
 					</div>
 				</div>
 			</div>
