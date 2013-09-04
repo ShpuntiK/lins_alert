@@ -11,7 +11,7 @@ active
 {% block styles %}
 <link rel="stylesheet" href="/static/css/bootstrap-datepicker.css" />
 <style>
-.email-alert-input {
+.email-alert-input, .sms-alert-input {
 	margin-top: 10px;
 }
 
@@ -62,6 +62,8 @@ $(document).ready(function(){
 			hour = t[0],
 			min = t[1];
 
+		if(hour > 23) hour = 0
+
 		if(min == 0){
 			min = 30;
 			if(toggleTime && hour != 0) hour--;
@@ -94,9 +96,18 @@ $(document).ready(function(){
 	*/
 
 	$("#email-alert").click(function(){
-		if($(this).is(':checked')) $(".email-alert-input").show().find("input").val("");
+		if($(this).is(":checked")) $(".email-alert-input").show().find("input").val("");
 		else $(".email-alert-input").hide().find("input").val("");
 	});
+
+	if($("#email-alert").is(":checked")) $(".email-alert-input").show();
+
+	$("#sms-alert").click(function(){
+		if($(this).is(":checked")) $(".sms-alert-input").show().find("input").val("");
+		else $(".sms-alert-input").hide().find("input").val("");
+	});
+
+	if($("#sms-alert").is(":checked")) $(".sms-alert-input").show()
 
 	var now = new Date();
 
@@ -135,7 +146,7 @@ $(document).ready(function(){
 							{{ form.alert_email }} email
 						</label>				
 						<label class="checkbox-inline">
-							{{ form.alert_sms }} sms <span class="label label-info">временно не работает</span>
+							{{ form.alert_sms }} sms
 						</label>
 					</div>
 					<div class="email-alert-input" {% if not form.alert_email.value %}style="display: none;"{% endif %}>
@@ -147,7 +158,28 @@ $(document).ready(function(){
 								</div>
 							{% endfor %}
 						{% endif %}
-						{{ form.email }}
+						<div class="input-group">
+							<span class="input-group-addon" style="color: #333;">
+								<span class="glyphicon glyphicon-envelope"></span>
+							</span>
+							{{ form.email }}
+						</div>
+					</div>
+					<div class="sms-alert-input" {% if not form.alert_sms.value %}style="display: none;"{% endif %}>
+						{% if form.phone.errors %}
+							{% for error in form.phone.errors %}
+								<div class="alert alert-danger alert-dismissable">
+									<strong>{{ error|escape }}</strong>
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+								</div>
+							{% endfor %}
+						{% endif %}
+						<div class="input-group">
+							<span class="input-group-addon" style="color: #333;">
+								<span class="glyphicon glyphicon-phone"></span>
+							</span>
+							{{ form.phone }}
+						</div>
 					</div>
 				</div>
 				<div class="form-group">

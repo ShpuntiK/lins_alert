@@ -6,10 +6,26 @@ from django.core.mail import send_mass_mail
 from django.contrib.auth.models import User
 from app.models import Alert
 from datetime import datetime, date, timedelta
+import requests
+import json
 
 class Command(BaseCommand):
 	args = ''
 	help = 'Send alerts for users'
+
+	def create_email(username, to_email):
+		subject = u'LinsAlert - оповещение о смене линз.'
+		msg = u'Здравствуйте, ' + username + u'.\n\n Сервис LinsAlert напоминает вам о необходимости смены линз.'
+		from_email = u'shpuntik74@gmail.com'
+
+		return (subject, msg, from_email, [to_email])
+
+	def create_sms(to_phone):
+		return {
+			'to': to_phone,
+			'from': u'LinsAlert',
+			'text': u'Сервис LinsAlert напоминает вам о необходимости смены линз.'
+		}
 
 	def handle(self, *args, **options):
 		cur_time = datetime.now().strftime('%H:%M')
@@ -29,16 +45,23 @@ class Command(BaseCommand):
 					t_date += timedelta(days=real_period[alert.period])
 		
 		if len(alerts) != 0:
-			msges = []
+			email_msg = []
+			sms_msg = []
 			
 			for alert in alerts:
-				subject = u'LinsAlert - оповещение о смене линз.'
-				msg = u'Здравствуйте, ' + alert.user.first_name + u'.\n\n Сервис LinsAlert напоминает вам об необходимости смены линз.'
-				from_email = u'shpuntik74@gmail.com'
-				
-				msges.append((subject, msg, from_email, [alert.email]))
-			
+				if alert.alert_email:				
+					email_msg.append(create_email(alert.user.first_name, alert.email))
+				if alert.alert_phone:
+					sms_msg.append(create_sms(alert.phone))
+
 			try:
-				send_mass_mail(msges, fail_silently=False)
+				send_mass_mail(email_msg, fail_silently=False)
 			except Exception as error:
-				print CommandError(error)
+				print 'Email alert error: %s' % CommandError(error)
+			try:
+				sms_id = '7920'
+				sms_key = '4700ABBCB9177DD2'
+				headers = {'content-type': 'application/json'}
+				r = requests.post('http://bytehand.com:3800/send_multi?id='+sms_id+'&key='+sms_key, data=json.dumps(sms_msg), headers=headers)
+			except Exception as error:
+				print 'Sms alert error: %s' % r.json()

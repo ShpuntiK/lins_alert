@@ -57,13 +57,14 @@ class SettingsForm(forms.ModelForm):
 	finish = forms.DateField(input_formats=('%d.%m.%Y',), error_messages=RU_ERRORS, widget=forms.DateInput(attrs={'class': 'input-small form-control'}))
 	time = forms.TimeField(input_formats=('%H:%M',), error_messages=RU_ERRORS, widget=forms.TimeInput(attrs={'class': 'form-control', 'id': 'alert-time-display', 'value': '12:00'}))
 	email = forms.EmailField(required=False, error_messages=RU_ERRORS, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': u'Укажите email для оповещений'}))
+	phone = forms.RegexField(r'^\+79\d{9}$', '^\+79\d{9}$', required=False, error_messages=RU_ERRORS, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'+79123456789'}))
 	user_time = forms.CharField(widget=forms.HiddenInput())
 
 	class Meta:
 		model = Alert
 		widgets = {
 			'alert_email': forms.CheckboxInput(attrs={'id': 'email-alert'}),
-			'alert_sms': forms.CheckboxInput(attrs={'disabled': ''}),
+			'alert_sms': forms.CheckboxInput(attrs={'id': 'sms-alert'}),
 			'period': forms.Select(attrs={'class': 'form-control'}),
 		}
 		exclude = ['user', 'alert_server_time']
@@ -71,9 +72,11 @@ class SettingsForm(forms.ModelForm):
 	def clean(self):
 		cleaned_data = super(SettingsForm, self).clean()
 
-		if cleaned_data.get('alert_email'):
-			if cleaned_data.get('email') == '':
-				raise forms.ValidationError(u'Введите email')
+		if cleaned_data.get('alert_email') and cleaned_data.get('email') == '':
+			raise forms.ValidationError(u'Введите email')
+
+		if cleaned_data.get('alert_sms') and cleaned_data.get('phone') == '':
+			raise forms.ValidationError(u'Введите номер телефона')
 	
 		return cleaned_data
 
