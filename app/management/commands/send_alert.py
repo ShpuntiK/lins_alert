@@ -9,28 +9,28 @@ from datetime import datetime, date, timedelta
 import requests
 import json
 
+def create_email(username, to_email):
+	subject = u'LinsAlert - оповещение о смене линз.'
+	msg = u'Здравствуйте, ' + username + u'.\n\n Сервис LinsAlert напоминает вам о необходимости смены линз.'
+	from_email = u'shpuntik74@gmail.com'
+
+	return (subject, msg, from_email, [to_email])
+
+def create_sms(to_phone):
+	return {
+		'to': to_phone,
+		'from': u'LinsAlert',
+		'text': u'Сервис LinsAlert напоминает вам о необходимости смены линз.'
+	}
+
 class Command(BaseCommand):
 	args = ''
 	help = 'Send alerts for users'
 
-	def create_email(username, to_email):
-		subject = u'LinsAlert - оповещение о смене линз.'
-		msg = u'Здравствуйте, ' + username + u'.\n\n Сервис LinsAlert напоминает вам о необходимости смены линз.'
-		from_email = u'shpuntik74@gmail.com'
-
-		return (subject, msg, from_email, [to_email])
-
-	def create_sms(to_phone):
-		return {
-			'to': to_phone,
-			'from': u'LinsAlert',
-			'text': u'Сервис LinsAlert напоминает вам о необходимости смены линз.'
-		}
-
 	def handle(self, *args, **options):
 		cur_time = datetime.now().strftime('%H:%M')
 		cur_date = date.today()
-		pre_alerts = Alert.objects.filter(alert_server_time=cur_time, start__lte=cur_date, finish__gte=cur_date)
+		pre_alerts = Alert.objects.all()#filter(alert_server_time=cur_time, start__lte=cur_date, finish__gte=cur_date)
 		alerts = []
 
 		for alert in pre_alerts:
