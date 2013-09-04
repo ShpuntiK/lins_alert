@@ -95,19 +95,23 @@ $(document).ready(function(){
 	*	Controls
 	*/
 
-	$("#email-alert").click(function(){
-		if($(this).is(":checked")) $(".email-alert-input").show().find("input").val("");
-		else $(".email-alert-input").hide().find("input").val("");
-	});
+	var email, phone;
 
-	if($("#email-alert").is(":checked")) $(".email-alert-input").show();
+	$("#email-alert").click(function(){
+		if($(this).is(":checked")) $(".email-alert-input").show().find("input").val(email);
+		else{
+			email = $(".email-alert-input").find("input").val();
+			$(".email-alert-input").hide().find("input").val("");
+		};
+	});
 
 	$("#sms-alert").click(function(){
-		if($(this).is(":checked")) $(".sms-alert-input").show().find("input").val("");
-		else $(".sms-alert-input").hide().find("input").val("");
+		if($(this).is(":checked")) $(".sms-alert-input").show().find("input").val(phone);
+		else{
+			phone = $(".sms-alert-input").find("input").val();
+			$(".sms-alert-input").hide().find("input").val("");
+		};
 	});
-
-	if($("#sms-alert").is(":checked")) $(".sms-alert-input").show()
 
 	var now = new Date();
 
