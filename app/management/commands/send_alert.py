@@ -11,7 +11,7 @@ import json
 
 def create_email(username, to_email):
 	subject = u'LinsAlert - оповещение о смене линз.'
-	msg = u'Здравствуйте, ' + username + u'.\n\n Сервис LinsAlert напоминает вам о необходимости смены линз.'
+	msg = u'Здравствуйте, ' + username + u'.\n\nСервис LinsAlert напоминает вам о необходимости смены линз.'
 	from_email = u'shpuntik74@gmail.com'
 
 	return (subject, msg, from_email, [to_email])
@@ -30,7 +30,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		cur_time = datetime.now().strftime('%H:%M')
 		cur_date = date.today()
-		pre_alerts = Alert.objects.all()#filter(alert_server_time=cur_time, start__lte=cur_date, finish__gte=cur_date)
+		pre_alerts = Alert.objects.filter(alert_server_time=cur_time, start__lte=cur_date, finish__gte=cur_date)
 		alerts = []
 
 		for alert in pre_alerts:
@@ -51,7 +51,7 @@ class Command(BaseCommand):
 			for alert in alerts:
 				if alert.alert_email:				
 					email_msg.append(create_email(alert.user.first_name, alert.email))
-				if alert.alert_phone:
+				if alert.alert_sms:
 					sms_msg.append(create_sms(alert.phone))
 
 			try:
