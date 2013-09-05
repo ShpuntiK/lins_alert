@@ -53,9 +53,9 @@ class SignInForm(forms.Form):
 		return self.user or None
 
 class SettingsForm(forms.ModelForm):
-	start = forms.DateField(input_formats=('%d.%m.%Y',), error_messages=RU_ERRORS, widget=forms.DateInput(attrs={'class': 'input-small form-control'}))
-	finish = forms.DateField(input_formats=('%d.%m.%Y',), error_messages=RU_ERRORS, widget=forms.DateInput(attrs={'class': 'input-small form-control'}))
-	time = forms.TimeField(input_formats=('%H:%M',), error_messages=RU_ERRORS, widget=forms.TimeInput(attrs={'class': 'form-control', 'id': 'alert-time-display', 'value': '12:00'}))
+	start = forms.DateField(input_formats=('%d.%m.%Y',), error_messages=RU_ERRORS, widget=forms.TextInput(attrs={'class': 'input-small form-control'}))
+	finish = forms.DateField(input_formats=('%d.%m.%Y',), error_messages=RU_ERRORS, widget=forms.TextInput(attrs={'class': 'input-small form-control'}))
+	time = forms.TimeField(input_formats=('%H:%M',), error_messages=RU_ERRORS, widget=forms.TextInput(attrs={'class': 'form-control', 'id': 'alert-time-display', 'value': '12:00'}))
 	email = forms.EmailField(required=False, error_messages=RU_ERRORS, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': u'Укажите email для оповещений'}))
 	phone = forms.RegexField(r'^\+79\d{9}$', '^\+79\d{9}$', required=False, error_messages=RU_ERRORS, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'+79123456789'}))
 	user_time = forms.CharField(widget=forms.HiddenInput())
