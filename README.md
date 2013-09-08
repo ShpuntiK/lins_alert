@@ -1,4 +1,4 @@
-lins_alert
+lens_alert
 ==========
 
-DJango-project for alerting users, who use linses.
+Django-project for alerting users, who use lenses.
