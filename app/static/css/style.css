@@ -162,3 +162,7 @@ body {
 textarea.form-control {
 	resize: none;
 }
+
+.featurette-image {
+	box-shadow: 0 0 10px 3px #fff;
+}
